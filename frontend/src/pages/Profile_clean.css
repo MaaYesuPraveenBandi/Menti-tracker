@@ -1,0 +1,367 @@
+/* Profile Page - Clean and Working CSS */
+.profile {
+  padding: 40px !important;
+  max-width: 1600px;
+  margin: 0 auto;
+  background: 
+    linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%),
+    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%) !important;
+  min-height: 100vh !important;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.profile::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(155, 89, 182, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(142, 68, 173, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(52, 152, 219, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: backgroundFloat 40s ease-in-out infinite;
+}
+
+.profile h1 {
+  font-size: 64px;
+  font-weight: 900;
+  margin: 0 0 60px 0;
+  text-align: center;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad, #6c5ce7, #3498db, #2980b9);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease-in-out infinite;
+  text-shadow: 0 0 60px rgba(155, 89, 182, 0.5);
+  position: relative;
+  letter-spacing: 2px;
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.profile-info {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-align: center;
+}
+
+.profile-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #9b59b6, #8e44ad, #6c5ce7, #3498db);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+.avatar {
+  margin-bottom: 30px;
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad, #6c5ce7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 900;
+  color: white;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 40px rgba(155, 89, 182, 0.4),
+    0 0 60px rgba(155, 89, 182, 0.3);
+  transition: all 0.4s ease;
+}
+
+.user-details {
+  text-align: center;
+}
+
+.view-details h2 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.view-details p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+}
+
+.view-details button {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+}
+
+.view-details button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(155, 89, 182, 0.4);
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-form input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 15px 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.edit-form input:focus {
+  outline: none;
+  border-color: rgba(155, 89, 182, 0.6);
+  box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.edit-actions button {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+}
+
+.profile-stats {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.profile-stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #9b59b6, #8e44ad, #6c5ce7, #3498db);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+.stat-section {
+  margin-bottom: 40px;
+}
+
+.stat-section h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(155, 89, 182, 0.2);
+  border-color: rgba(155, 89, 182, 0.3);
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad, #6c5ce7);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-section p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.difficulty-stats {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.difficulty-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 100px;
+  transition: all 0.3s ease;
+}
+
+.difficulty-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.difficulty-item.easy {
+  border-color: rgba(46, 204, 113, 0.3);
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.2);
+}
+
+.difficulty-item.medium {
+  border-color: rgba(243, 156, 18, 0.3);
+  box-shadow: 0 0 20px rgba(243, 156, 18, 0.2);
+}
+
+.difficulty-item.hard {
+  border-color: rgba(231, 76, 60, 0.3);
+  box-shadow: 0 0 20px rgba(231, 76, 60, 0.2);
+}
+
+.difficulty-count {
+  font-size: 28px;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.difficulty-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.loading {
+  text-align: center;
+  padding: 80px;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes backgroundFloat {
+  0%, 100% { transform: translateX(0px) translateY(0px) rotate(0deg); }
+  25% { transform: translateX(20px) translateY(-20px) rotate(1deg); }
+  50% { transform: translateX(-15px) translateY(15px) rotate(-1deg); }
+  75% { transform: translateX(10px) translateY(10px) rotate(0.5deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile {
+    padding: 20px;
+  }
+  
+  .profile h1 {
+    font-size: 42px;
+  }
+  
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .stat-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  
+  .difficulty-stats {
+    gap: 15px;
+  }
+}
