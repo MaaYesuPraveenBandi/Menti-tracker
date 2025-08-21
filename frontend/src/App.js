@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Problems from './pages/Problems';
+import SimpleProblems from './pages/SimpleProblems';
 import Leaderboard from './pages/Leaderboard';
 import Solved from './pages/Solved';
 import Profile from './pages/Profile';
@@ -22,7 +23,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/problems" element={<Problems />} />
+            <Route path="/problems" element={<SimpleProblems />} />
+            <Route path="/problems-full" element={<Problems />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/solved" element={<Solved />} />
             <Route path="/profile" element={<Profile />} />

@@ -1,4 +1,4 @@
-/* Ultra-Modern Dashboard Styles 2025 with Glow Effects & Trendy Design */
+Ultra-Modern Dashboard Styles 2025 with Glow Effects & Trendy Design
 .dashboard {
   padding: 40px;
   max-width: 1600px;
@@ -411,7 +411,7 @@
 }
 
 /* Progress indicators with glow */
-.progress-container {
+/* .progress-container {
   margin-top: 15px;
   position: relative;
 }
@@ -513,4 +513,4 @@
   .activity-item:hover {
     transform: translateY(-10px) scale(1.02);
   }
-}
+} 

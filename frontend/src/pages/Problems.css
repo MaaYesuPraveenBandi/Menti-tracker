@@ -289,8 +289,111 @@
   /* Keep same dimensions - no transform changes */
 }
 
-.problem-card.solved::before {
-  background: linear-gradient(135deg, #4CAF50, #81C784) !important;
+.problem-card.completed {
+  background: rgba(76, 175, 80, 0.15) !important;
+  border: 1px solid rgba(76, 175, 80, 0.3) !important;
+}
+
+.problem-card.locked {
+  background: rgba(255, 193, 7, 0.1) !important;
+  border: 1px solid rgba(255, 193, 7, 0.3) !important;
+}
+
+.problem-card.unlocked {
+  background: rgba(0, 123, 255, 0.1) !important;
+  border: 1px solid rgba(0, 123, 255, 0.3) !important;
+}
+
+.problem-status {
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.problem-status.completed {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.problem-status.completed.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.problem-status.completed.clickable:hover {
+  background: rgba(76, 175, 80, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+}
+
+.problem-status.locked {
+  background: rgba(255, 193, 7, 0.2);
+  color: #FFC107;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.problem-status.unlocked {
+  background: rgba(0, 123, 255, 0.2);
+  color: #007BFF;
+  border: 1px solid rgba(0, 123, 255, 0.4);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.solve-btn.start {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+}
+
+.solve-btn.stop {
+  background: linear-gradient(135deg, #ffc107, #fd7e14);
+  color: white;
+  border: none;
+}
+
+.solve-btn.complete {
+  background: linear-gradient(135deg, #007bff, #6f42c1);
+  color: white;
+  border: none;
+}
+
+.solve-btn.locked {
+  background: #6c757d;
+  color: white;
+  border: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.solve-btn.completed {
+  background: #28a745;
+  color: white;
+  border: none;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.solve-btn.external {
+  background: linear-gradient(135deg, #17a2b8, #6f42c1);
+  color: white;
+  border: none;
+}
+
+.time-estimate {
+  background: rgba(108, 117, 125, 0.2);
+  color: #6c757d;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .difficulty-badge {
