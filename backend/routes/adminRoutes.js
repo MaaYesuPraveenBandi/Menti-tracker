@@ -23,34 +23,38 @@ router.get('/problems', [auth, adminAuth], async (req, res) => {
 // @access  Private
 router.post('/problems', [auth, adminAuth], async (req, res) => {
   try {
+    console.log('Received problem creation request:', req.body);
+    
     const {
       title,
-      description,
       difficulty,
-      category,
       points,
-      problemLink,
-      constraints,
-      tags
+      problemLink
     } = req.body;
+
+    console.log('Extracted fields:', { title, difficulty, points, problemLink });
 
     const problem = new Problem({
       title,
-      description,
+      description: '', // Default empty description
       difficulty,
-      category,
+      category: 'General', // Default category
       points,
       problemLink,
-      constraints,
-      tags,
+      constraints: '', // Default empty constraints
+      tags: [], // Default empty tags
       examples: [],
       testCases: []
     });
 
+    console.log('Created problem object:', problem);
+    
     await problem.save();
+    console.log('Problem saved successfully:', problem._id);
     res.json(problem);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error in POST /problems:', err.message);
+    console.error('Full error:', err);
     res.status(500).send('Server Error');
   }
 });
@@ -62,13 +66,9 @@ router.put('/problems/:id', [auth, adminAuth], async (req, res) => {
   try {
     const {
       title,
-      description,
       difficulty,
-      category,
       points,
-      problemLink,
-      constraints,
-      tags
+      problemLink
     } = req.body;
 
     let problem = await Problem.findById(req.params.id);
@@ -81,13 +81,14 @@ router.put('/problems/:id', [auth, adminAuth], async (req, res) => {
       req.params.id,
       {
         title,
-        description,
         difficulty,
-        category,
         points,
         problemLink,
-        constraints,
-        tags
+        // Keep existing values for fields not in the simplified form
+        description: problem.description || '',
+        category: problem.category || 'General',
+        constraints: problem.constraints || '',
+        tags: problem.tags || []
       },
       { new: true }
     );

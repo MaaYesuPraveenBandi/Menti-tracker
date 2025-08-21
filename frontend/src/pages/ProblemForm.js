@@ -10,12 +10,8 @@ const ProblemForm = () => {
 
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
     difficulty: 'Easy',
-    category: '',
     points: 10,
-    constraints: '',
-    tags: '',
     problemLink: ''
   });
 
@@ -34,12 +30,8 @@ const ProblemForm = () => {
       
       setFormData({
         title: problem.title,
-        description: problem.description,
         difficulty: problem.difficulty,
-        category: problem.category,
         points: problem.points,
-        constraints: problem.constraints || '',
-        tags: problem.tags ? problem.tags.join(', ') : '',
         problemLink: problem.problemLink || ''
       });
     } catch (err) {
@@ -60,8 +52,10 @@ const ProblemForm = () => {
 
     try {
       const problemData = {
-        ...formData,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+        title: formData.title,
+        difficulty: formData.difficulty,
+        points: formData.points,
+        problemLink: formData.problemLink
       };
 
       if (isEdit) {
@@ -75,6 +69,8 @@ const ProblemForm = () => {
       navigate('/admin/problems');
     } catch (err) {
       console.error('Error saving problem:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
       alert('Failed to save problem. Please try again.');
     }
     
@@ -108,18 +104,6 @@ const ProblemForm = () => {
           </div>
 
           <div className="form-group">
-            <label>Category *</label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              required
-              placeholder="e.g., Array, String, Dynamic Programming"
-            />
-          </div>
-
-          <div className="form-group">
             <label>Difficulty *</label>
             <select
               name="difficulty"
@@ -143,57 +127,24 @@ const ProblemForm = () => {
               onChange={handleInputChange}
               required
               min="1"
+              placeholder="Problem score"
             />
           </div>
-        </div>
 
-        <div className="form-group">
-          <label>Description *</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-            rows="6"
-            placeholder="Detailed problem description..."
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Constraints</label>
-          <textarea
-            name="constraints"
-            value={formData.constraints}
-            onChange={handleInputChange}
-            rows="3"
-            placeholder="Problem constraints (optional)"
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Problem Link *</label>
-          <input
-            type="url"
-            name="problemLink"
-            value={formData.problemLink}
-            onChange={handleInputChange}
-            required
-            placeholder="https://leetcode.com/problems/two-sum/ or https://codeforces.com/problem/..."
-          />
-          <small className="form-help">
-            Link to the actual problem platform (LeetCode, CodeForces, HackerRank, etc.)
-          </small>
-        </div>
-
-        <div className="form-group">
-          <label>Tags</label>
-          <input
-            type="text"
-            name="tags"
-            value={formData.tags}
-            onChange={handleInputChange}
-            placeholder="Comma-separated tags (e.g., sorting, binary-search)"
-          />
+          <div className="form-group">
+            <label>Problem Link *</label>
+            <input
+              type="url"
+              name="problemLink"
+              value={formData.problemLink}
+              onChange={handleInputChange}
+              required
+              placeholder="https://leetcode.com/problems/two-sum/"
+            />
+            <small className="form-help">
+              Link to the actual problem platform (LeetCode, CodeForces, HackerRank, etc.)
+            </small>
+          </div>
         </div>
 
         <div className="form-actions">
