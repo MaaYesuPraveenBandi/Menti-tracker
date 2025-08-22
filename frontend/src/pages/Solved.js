@@ -1,74 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import useSWR, { mutate } from 'swr';
 import api from '../utils/api';
 import './Solved.css';
 
+const fetcher = (url) => api.get(url).then(res => res.data);
+
 const Solved = () => {
-  const [solvedProblems, setSolvedProblems] = useState([]);
-  const [allProblems, setAllProblems] = useState([]);
-  const [stats, setStats] = useState({ easy: 0, medium: 0, hard: 0, total: 0 });
-  const [loading, setLoading] = useState(true);
+  const { data: userProgress, error: userError } = useSWR('/progress/user', fetcher);
+  const { data: allProblems, error: problemsError } = useSWR('/problems', fetcher);
+
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const [userRes, problemsRes] = await Promise.all([
-        api.get('/progress/user'),
-        api.get('/problems')
-      ]);
-
-      const solvedIds = userRes.data.solvedProblems.map(sp => sp.problemId);
-      const allProblemsData = problemsRes.data;
-      
-      const solvedProblemsWithDetails = allProblemsData.filter(problem => 
-        solvedIds.includes(problem._id)
-      );
-      
-      setAllProblems(allProblemsData);
-      setSolvedProblems(solvedProblemsWithDetails);
-      
-      const newStats = {
-        easy: solvedProblemsWithDetails.filter(p => p.difficulty === 'Easy').length,
-        medium: solvedProblemsWithDetails.filter(p => p.difficulty === 'Medium').length,
-        hard: solvedProblemsWithDetails.filter(p => p.difficulty === 'Hard').length,
-        total: solvedProblemsWithDetails.length
-      };
-      setStats(newStats);
-      
-    } catch (err) {
-      console.error('Error fetching data:', err);
-    } finally {
-      setLoading(false);
+  const { solvedProblems, stats } = useMemo(() => {
+    if (!userProgress || !allProblems) {
+      return { solvedProblems: [], stats: { easy: 0, medium: 0, hard: 0, total: 0 } };
     }
-  };
+
+    const solvedIds = new Set(userProgress.solvedProblems.map(sp => sp.problemId));
+    const solvedProblemsWithDetails = allProblems.filter(problem => solvedIds.has(problem._id));
+
+    const calculatedStats = {
+      easy: solvedProblemsWithDetails.filter(p => p.difficulty === 'Easy').length,
+      medium: solvedProblemsWithDetails.filter(p => p.difficulty === 'Medium').length,
+      hard: solvedProblemsWithDetails.filter(p => p.difficulty === 'Hard').length,
+      total: solvedProblemsWithDetails.length
+    };
+
+    return { solvedProblems: solvedProblemsWithDetails, stats: calculatedStats };
+  }, [userProgress, allProblems]);
 
   const handleUnsolve = async (problemId) => {
     try {
+      // Optimistically update the UI
+      const updatedProgress = {
+        ...userProgress,
+        solvedProblems: userProgress.solvedProblems.filter(p => p.problemId !== problemId),
+      };
+      mutate('/progress/user', updatedProgress, false);
+
       const res = await api.post('/progress/unsolve', { problemId });
       
       if (res.status === 200) {
-        // Remove from solved problems
-        setSolvedProblems(prev => prev.filter(p => p._id !== problemId));
-        
-        // Update stats
-        const problem = solvedProblems.find(p => p._id === problemId);
-        if (problem) {
-          setStats(prev => ({
-            ...prev,
-            [problem.difficulty.toLowerCase()]: prev[problem.difficulty.toLowerCase()] - 1,
-            total: prev.total - 1
-          }));
-        }
-        
+        // Revalidate the data from the server
+        mutate('/progress/user');
         alert('Problem unmarked as solved! ✅');
+      } else {
+        // Revert if the API call fails
+        mutate('/progress/user', userProgress, false);
       }
     } catch (err) {
       console.error('Error unsolving problem:', err);
       alert('Error updating solve status. Please try again.');
+      // Revert on error
+      mutate('/progress/user', userProgress, false);
     }
   };
 
@@ -81,17 +65,30 @@ const Solved = () => {
     return badges[difficulty] || { emoji: '⚪', class: 'unknown' };
   };
 
-  const filteredProblems = solvedProblems.filter(problem => {
-    if (filter === 'all') return true;
-    return problem.difficulty.toLowerCase() === filter;
-  });
+  const filteredProblems = useMemo(() => {
+    if (filter === 'all') return solvedProblems;
+    return solvedProblems.filter(problem => problem.difficulty.toLowerCase() === filter);
+  }, [solvedProblems, filter]);
 
-  if (loading) {
+  const isLoading = !userProgress && !userError && !allProblems && !problemsError;
+
+  if (isLoading) {
     return (
       <div className="solved">
         <div className="loading-container">
           <div className="loading-spinner"></div>
           <p>Loading your achievements...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (userError || problemsError) {
+    return (
+      <div className="solved">
+        <div className="empty-state">
+          <h3>Error Loading Data</h3>
+          <p>Could not load your solved problems. Please try again later.</p>
         </div>
       </div>
     );

@@ -11,7 +11,6 @@ const Problems = () => {
     category: 'All'
   });
   const [loading, setLoading] = useState(true);
-  const [solvedCount, setSolvedCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,10 +39,6 @@ const Problems = () => {
   useEffect(() => {
     filterProblems();
   }, [problems, filters]);
-
-  useEffect(() => {
-    setSolvedCount(solvedProblems.length);
-  }, [solvedProblems]);
 
   const filterProblems = () => {
     let filtered = problems;
@@ -120,7 +115,7 @@ const Problems = () => {
         <h1>Coding Problems</h1>
         <div className="problems-stats">
           <span className="solved-counter">
-            Solved: <strong>{solvedCount}</strong> / {problems.length}
+            Solved: <strong>{solvedProblems.length}</strong> / {problems.length}
           </span>
         </div>
       </div>
