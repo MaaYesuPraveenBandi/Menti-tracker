@@ -7,7 +7,7 @@ const ProblemSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    default: ''
+    required: true
   },
   difficulty: {
     type: String,
@@ -16,7 +16,7 @@ const ProblemSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    default: 'General'
+    required: true
   },
   points: {
     type: Number,
