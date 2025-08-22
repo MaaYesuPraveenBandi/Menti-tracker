@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
-import './Problems.css';
+import './Problems_ultra.css';
 
 const Problems = () => {
   const [problems, setProblems] = useState([]);
@@ -14,8 +14,27 @@ const Problems = () => {
   const [solvedCount, setSolvedCount] = useState(0);
 
   useEffect(() => {
-    fetchProblems();
-    fetchSolvedProblems();
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [problemsRes, solvedRes] = await Promise.all([
+          api.get('/problems'),
+          api.get('/progress/user')
+        ]);
+        
+        setProblems(problemsRes.data);
+        setFilteredProblems(problemsRes.data);
+        setSolvedProblems(solvedRes.data.solvedProblems.map(sp => sp.problemId));
+        
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        alert('Error loading problems. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -25,27 +44,6 @@ const Problems = () => {
   useEffect(() => {
     setSolvedCount(solvedProblems.length);
   }, [solvedProblems]);
-
-  const fetchProblems = async () => {
-    try {
-      const res = await api.get('/problems');
-      setProblems(res.data);
-      setFilteredProblems(res.data);
-    } catch (err) {
-      console.error('Error fetching problems:', err);
-      alert('Error loading problems. Please try again.');
-    }
-  };
-
-  const fetchSolvedProblems = async () => {
-    try {
-      const res = await api.get('/progress/user');
-      setSolvedProblems(res.data.solvedProblems.map(sp => sp.problemId));
-    } catch (err) {
-      console.error('Error fetching solved problems:', err);
-    }
-    setLoading(false);
-  };
 
   const filterProblems = () => {
     let filtered = problems;
@@ -166,46 +164,32 @@ const Problems = () => {
             <p>No problems found. {filters.difficulty !== 'All' || filters.category !== 'All' ? 'Try adjusting your filters.' : 'Ask admin to add some problems.'}</p>
           </div>
         ) : (
-          filteredProblems.map(problem => (
-            <div key={problem._id} className={`problem-item ${isProblemSolved(problem._id) ? 'solved' : ''}`}>
-              <div className="problem-checkbox">
+          filteredProblems.map((problem, index) => (
+            <div key={problem._id} className={`problem-card ${isProblemSolved(problem._id) ? 'solved' : ''}`} style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="problem-header">
+                <h3>{problem.title}</h3>
+                <span className={`difficulty-badge ${problem.difficulty.toLowerCase()}`}>{problem.difficulty}</span>
+              </div>
+              <div className="problem-meta">
+                <span className="category">📂 {problem.category}</span>
+                <span className="points">⭐ {problem.points} pts</span>
+              </div>
+              <div className="problem-actions">
                 <input
                   type="checkbox"
                   id={`problem-${problem._id}`}
                   checked={isProblemSolved(problem._id)}
                   onChange={() => handleSolveToggle(problem._id)}
+                  className="solve-checkbox"
                 />
-                <label htmlFor={`problem-${problem._id}`}></label>
-              </div>
-              
-              <div className="problem-content">
-                <div className="problem-info">
-                  <h3 className={`problem-title ${isProblemSolved(problem._id) ? 'strikethrough' : ''}`}>
-                    {problem.title}
-                  </h3>
-                  <div className="problem-meta">
-                    <span className="difficulty-badge">
-                      {getDifficultyDisplay(problem.difficulty)}
-                    </span>
-                    <span className="category-badge">{problem.category}</span>
-                    <span className="points-badge">{problem.points} pts</span>
-                  </div>
-                </div>
-                
-                <div className="problem-actions">
-                  {problem.problemLink ? (
-                    <a 
-                      href={problem.problemLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="solve-link"
-                    >
-                      Solve Problem →
-                    </a>
-                  ) : (
-                    <span className="no-link">Link Not Available</span>
-                  )}
-                </div>
+                <label htmlFor={`problem-${problem._id}`} className="solve-label">
+                  {isProblemSolved(problem._id) ? 'Mark as Unsolved' : 'Mark as Solved'}
+                </label>
+                {problem.problemLink && (
+                  <a href={problem.problemLink} target="_blank" rel="noopener noreferrer" className="solve-btn">
+                    Solve Problem
+                  </a>
+                )}
               </div>
             </div>
           ))

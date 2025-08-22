@@ -14,16 +14,16 @@ const Solved = () => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      // Fetch user's solved problems
-      const userRes = await api.get('/progress/user');
+      const [userRes, problemsRes] = await Promise.all([
+        api.get('/progress/user'),
+        api.get('/problems')
+      ]);
+
       const solvedIds = userRes.data.solvedProblems.map(sp => sp.problemId);
-      
-      // Fetch all problems to get details
-      const problemsRes = await api.get('/problems');
       const allProblemsData = problemsRes.data;
       
-      // Filter solved problems with full details
       const solvedProblemsWithDetails = allProblemsData.filter(problem => 
         solvedIds.includes(problem._id)
       );
@@ -31,19 +31,19 @@ const Solved = () => {
       setAllProblems(allProblemsData);
       setSolvedProblems(solvedProblemsWithDetails);
       
-      // Calculate stats
-      const stats = {
+      const newStats = {
         easy: solvedProblemsWithDetails.filter(p => p.difficulty === 'Easy').length,
         medium: solvedProblemsWithDetails.filter(p => p.difficulty === 'Medium').length,
         hard: solvedProblemsWithDetails.filter(p => p.difficulty === 'Hard').length,
         total: solvedProblemsWithDetails.length
       };
-      setStats(stats);
+      setStats(newStats);
       
     } catch (err) {
       console.error('Error fetching data:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleUnsolve = async (problemId) => {
