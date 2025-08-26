@@ -22,8 +22,7 @@ router.post('/register', async (req, res) => {
     user = new User({
       username,
       email,
-      password,
-      isAdmin: false  // Explicitly set to false for new registrations
+      password
     });
 
     // Encrypt password

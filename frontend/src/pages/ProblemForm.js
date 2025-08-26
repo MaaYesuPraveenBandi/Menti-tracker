@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../utils/api';
-import './ProblemForm_new.css';
+import './ProblemForm.css'; // switched to standard css
 
 const ProblemForm = () => {
   const navigate = useNavigate();
@@ -10,9 +10,11 @@ const ProblemForm = () => {
 
   const [formData, setFormData] = useState({
     title: '',
-    difficulty: 'Easy',
-    points: 10,
-    problemLink: ''
+  title: '',
+  difficulty: 'Easy',
+  category: '',
+  points: 10,
+  problemLink: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -31,6 +33,7 @@ const ProblemForm = () => {
       setFormData({
         title: problem.title,
         difficulty: problem.difficulty,
+        category: problem.category,
         points: problem.points,
         problemLink: problem.problemLink || ''
       });
@@ -51,11 +54,13 @@ const ProblemForm = () => {
     setLoading(true);
 
     try {
+      // Only include needed fields
       const problemData = {
         title: formData.title,
         difficulty: formData.difficulty,
+        category: formData.category,
         points: formData.points,
-        problemLink: formData.problemLink
+        problemLink: formData.problemLink,
       };
 
       if (isEdit) {
@@ -68,13 +73,12 @@ const ProblemForm = () => {
       
       navigate('/admin/problems');
     } catch (err) {
-      console.error('Error saving problem:', err);
-      console.error('Error response:', err.response?.data);
-      console.error('Error status:', err.response?.status);
-      alert('Failed to save problem. Please try again.');
+      console.error('Error saving problem:', err.response || err);
+      const msg = err.response?.data?.msg || 'Failed to save problem. Please check inputs and try again.';
+      alert(msg);
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (
@@ -104,6 +108,18 @@ const ProblemForm = () => {
           </div>
 
           <div className="form-group">
+            <label>Category *</label>
+            <input
+              type="text"
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              required
+              placeholder="e.g., Array, String, Dynamic Programming"
+            />
+          </div>
+
+          <div className="form-group">
             <label>Difficulty *</label>
             <select
               name="difficulty"
@@ -127,24 +143,23 @@ const ProblemForm = () => {
               onChange={handleInputChange}
               required
               min="1"
-              placeholder="Problem score"
             />
           </div>
+        </div>
 
-          <div className="form-group">
-            <label>Problem Link *</label>
-            <input
-              type="url"
-              name="problemLink"
-              value={formData.problemLink}
-              onChange={handleInputChange}
-              required
-              placeholder="https://leetcode.com/problems/two-sum/"
-            />
-            <small className="form-help">
-              Link to the actual problem platform (LeetCode, CodeForces, HackerRank, etc.)
-            </small>
-          </div>
+        <div className="form-group">
+          <label>Problem Link *</label>
+          <input
+            type="url"
+            name="problemLink"
+            value={formData.problemLink}
+            onChange={handleInputChange}
+            required
+            placeholder="https://leetcode.com/problems/two-sum/ or https://codeforces.com/problem/..."
+          />
+          <small className="form-help">
+            Link to the actual problem platform (LeetCode, CodeForces, HackerRank, etc.)
+          </small>
         </div>
 
         <div className="form-actions">

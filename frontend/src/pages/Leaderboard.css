@@ -1,4 +1,4 @@
-/* Leaderboard Page - Clean and Working CSS */
+/* Ultra-Modern Leaderboard Page 2025 with Glow Effects & Trendy Design */
 .leaderboard {
   padding: 40px !important;
   max-width: 1600px;
@@ -21,12 +21,12 @@
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 30% 70%, rgba(155, 89, 182, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 70% 30%, rgba(142, 68, 173, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(52, 152, 219, 0.15) 0%, transparent 50%);
+    radial-gradient(circle at 30% 70%, rgba(241, 196, 15, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(230, 126, 34, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(149, 165, 166, 0.15) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
-  animation: backgroundFloat 40s ease-in-out infinite;
+  animation: backgroundFloat 35s ease-in-out infinite;
 }
 
 .leaderboard h1 {
@@ -34,309 +34,610 @@
   font-weight: 900;
   margin: 0 0 60px 0;
   text-align: center;
-  background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #c0392b, #8e44ad);
+  background: linear-gradient(135deg, #f1c40f, #e67e22, #95a5a6, #3498db, #9b59b6);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: gradientShift 6s ease-in-out infinite;
-  text-shadow: 0 0 60px rgba(243, 156, 18, 0.5);
+  text-shadow: 0 0 60px rgba(241, 196, 15, 0.5);
   position: relative;
   letter-spacing: 2px;
 }
 
-.current-user-rank {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 24px !important;
-  padding: 30px !important;
-  margin: 0 0 40px 0 !important;
-  text-align: center;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(243, 156, 18, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.leaderboard h1::after {
+  content: 'Leaderboard';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(241, 196, 15, 0.8), rgba(230, 126, 34, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(15px);
+  z-index: -1;
+  animation: glowPulse 3s ease-in-out infinite;
 }
 
-.current-user-rank::before {
+.top-three {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  margin-bottom: 60px;
+  perspective: 1000px;
+}
+
+.podium-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 45px;
+  border-radius: 28px;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.podium-card.first {
+  order: 2;
+  transform: scale(1.08) translateY(-10px);
+  z-index: 3;
+}
+
+.podium-card.first::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.8s;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(241, 196, 15, 0.7);
 }
 
-.current-user-rank:hover::before {
-  left: 100%;
+.podium-card.second {
+  order: 1;
+  transform: scale(1.02);
+  z-index: 2;
 }
 
-.current-user-rank h3 {
-  font-size: 28px;
+.podium-card.second::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease-in-out infinite;
+  box-shadow: 0 0 25px rgba(149, 165, 166, 0.6);
+}
+
+.podium-card.third {
+  order: 3;
+  z-index: 1;
+}
+
+.podium-card.third::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease-in-out infinite;
+  box-shadow: 0 0 25px rgba(230, 126, 34, 0.6);
+}
+
+.podium-card:hover {
+  transform: translateY(-20px) rotateX(5deg) rotateY(5deg) scale(1.05);
+  box-shadow: 
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(241, 196, 15, 0.4);
+}
+
+.podium-card.first:hover {
+  transform: translateY(-25px) rotateX(5deg) rotateY(5deg) scale(1.12);
+}
+
+.rank-badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+  margin: 0 auto 25px;
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.rank-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  filter: blur(15px);
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.rank-badge.first {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  box-shadow: 0 0 40px rgba(241, 196, 15, 0.6);
+}
+
+.rank-badge.second {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  box-shadow: 0 0 35px rgba(149, 165, 166, 0.6);
+}
+
+.rank-badge.third {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  box-shadow: 0 0 35px rgba(230, 126, 34, 0.6);
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  margin: 0 auto 20px;
+  object-fit: cover;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.user-name {
+  font-size: 24px;
   font-weight: 800;
-  margin: 0 0 10px 0;
-  color: #f39c12;
-  text-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 15px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
 }
 
-.current-user-rank p {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
+.user-score {
+  font-size: 40px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #f1c40f, #e67e22, #95a5a6, #3498db);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
+  display: block;
+  margin-bottom: 15px;
+  text-shadow: 0 0 25px rgba(241, 196, 15, 0.4);
+}
+
+.user-problems {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .leaderboard-table {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 24px !important;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
   overflow: hidden;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(52, 152, 219, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .table-header {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(20px);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 30px 35px;
   display: grid;
   grid-template-columns: 120px 1fr 150px 180px;
-  gap: 20px;
-  padding: 25px 30px;
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(155, 89, 182, 0.3));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 25px;
+  align-items: center;
   font-weight: 800;
-  font-size: 16px;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.table-header span {
-  text-align: center;
+  font-size: 18px;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .table-row {
+  padding: 25px 30px;
   display: grid;
   grid-template-columns: 120px 1fr 150px 180px;
-  gap: 20px;
-  padding: 20px 30px;
+  gap: 25px;
+  align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
+  margin-bottom: 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .table-row::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
+  left: 0;
+  width: 0;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-  transition: left 0.6s;
+  background: linear-gradient(135deg, rgba(241, 196, 15, 0.15), rgba(230, 126, 34, 0.15));
+  transition: width 0.4s ease;
+  border-radius: 16px;
 }
 
 .table-row:hover {
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 
+    0 15px 40px rgba(241, 196, 15, 0.2),
+    0 0 50px rgba(230, 126, 34, 0.1),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  border-color: rgba(241, 196, 15, 0.3);
 }
 
 .table-row:hover::before {
-  left: 100%;
+  width: 100%;
 }
 
-.table-row:last-child {
-  border-bottom: none;
+.rank-number {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f1c40f, #e67e22);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
 }
 
-.table-row.top-three {
-  background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(230, 126, 34, 0.1));
-  border-left: 4px solid #f39c12;
-}
-
-.table-row.top-three .rank {
-  font-size: 20px;
-  font-weight: 900;
-  color: #f39c12;
-  text-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
-}
-
-.rank, .username, .score, .problems-solved {
+.user-info {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  gap: 20px;
 }
 
-.rank {
-  font-weight: 800;
-  font-size: 18px;
-}
-
-.username {
-  font-weight: 600;
-  text-align: left;
-  justify-content: flex-start;
-  color: #3498db;
-  text-shadow: 0 0 10px rgba(52, 152, 219, 0.4);
-}
-
-.score {
-  font-weight: 700;
-  color: #2ecc71;
-  text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
-}
-
-.problems-solved {
-  font-weight: 600;
-  color: #9b59b6;
-  text-shadow: 0 0 10px rgba(155, 89, 182, 0.4);
-}
-
-.empty-state {
-  text-align: center;
-  padding: 80px 40px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  margin: 40px 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.empty-state p {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.7);
+.user-info .user-avatar {
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   margin: 0;
 }
 
-.loading {
+.user-info .user-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.score {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
+}
+
+.problems-solved {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 16px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.join-date {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+.current-user {
+  background: rgba(46, 204, 113, 0.1);
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  box-shadow: 0 0 30px rgba(46, 204, 113, 0.2);
+}
+
+.current-user .rank-number {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.no-data {
   text-align: center;
   padding: 80px 40px;
-  font-size: 24px;
-  color: #3498db;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  margin: 40px auto;
-  max-width: 400px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: pulse 2s infinite;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px);
+  border-radius: 28px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.no-data h3 {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.no-data p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+.loading::after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top: 5px solid #f1c40f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 25px;
+  box-shadow: 0 0 30px rgba(241, 196, 15, 0.4);
+}
+
+/* Animations */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 200% 50%; }
+  75% { background-position: 300% 50%; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
 }
 
 @keyframes backgroundFloat {
   0%, 100% { 
-    transform: scale(1) rotate(0deg);
+    transform: translateY(0px) rotate(0deg);
     opacity: 0.7;
   }
-  33% { 
-    transform: scale(1.1) rotate(2deg);
-    opacity: 0.8;
-  }
-  66% { 
-    transform: scale(0.9) rotate(-1deg);
-    opacity: 0.6;
-  }
-}
-
-@keyframes gradientShift {
-  0% { 
-    background-position: 0% 50%;
-    transform: scale(1);
-  }
   50% { 
-    background-position: 100% 50%;
-    transform: scale(1.02);
-  }
-  100% { 
-    background-position: 0% 50%;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { 
+    transform: translateY(-20px) rotate(1deg);
     opacity: 1;
-    transform: scale(1);
-  }
-  50% { 
-    opacity: 0.8;
-    transform: scale(1.02);
   }
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Floating animation for podium cards */
 @keyframes float {
-  0%, 100% { 
-    transform: translateY(0px) rotate(0deg);
-  }
-  33% { 
-    transform: translateY(-10px) rotate(1deg);
-  }
-  66% { 
-    transform: translateY(5px) rotate(-0.5deg);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.podium-card {
+  animation: float 8s ease-in-out infinite;
+}
+
+.podium-card.first { 
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 0.2s; 
+}
+.podium-card.second { 
+  animation: float 7s ease-in-out infinite;
+  animation-delay: 0.1s; 
+}
+.podium-card.third { 
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 0.3s; 
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .leaderboard {
-    padding: 20px !important;
+    padding: 25px;
   }
   
   .leaderboard h1 {
-    font-size: 36px;
-    margin-bottom: 30px;
+    font-size: 42px;
+  }
+  
+  .top-three {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .podium-card.first {
+    order: 1;
+    transform: none;
+  }
+  
+  .podium-card.first:hover {
+    transform: translateY(-15px) scale(1.02);
   }
   
   .table-header,
   .table-row {
-    grid-template-columns: 80px 1fr 100px 120px;
+    grid-template-columns: 80px 1fr 100px;
+    gap: 15px;
+    padding: 25px;
+  }
+  
+  .table-header .problems-solved,
+  .table-header .join-date,
+  .table-row .problems-solved,
+  .table-row .join-date {
+    display: none;
+  }
+  
+  .user-info {
+    flex-direction: column;
+    text-align: center;
     gap: 10px;
-    padding: 15px 20px;
   }
   
-  .table-header span,
-  .rank, .username, .score, .problems-solved {
-    font-size: 14px;
-  }
-  
-  .current-user-rank {
-    padding: 20px !important;
-    margin-bottom: 30px !important;
-  }
-  
-  .current-user-rank h3 {
-    font-size: 22px;
-  }
-  
-  .current-user-rank p {
-    font-size: 16px;
+  .user-info .user-avatar {
+    width: 50px;
+    height: 50px;
   }
 }
 
-@media (max-width: 480px) {
-  .table-header,
-  .table-row {
-    grid-template-columns: 60px 1fr 80px 100px;
-    gap: 8px;
-    padding: 12px 15px;
-  }
-  
-  .leaderboard h1 {
-    font-size: 28px;
-  }
-  
-  .table-header span,
-  .rank, .username, .score, .problems-solved {
-    font-size: 12px;
-  }
+/* Missing CSS classes for React components */
+.current-user-rank {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 35px;
+  margin-bottom: 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: float 6s ease-in-out infinite;
+}
+
+.current-user-rank::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #f1c40f, #e67e22, #95a5a6, #3498db);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+.current-user-rank:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 25px 60px rgba(241, 196, 15, 0.25),
+    0 0 80px rgba(230, 126, 34, 0.15),
+    inset 0 0 25px rgba(255, 255, 255, 0.1);
+  border-color: rgba(241, 196, 15, 0.4);
+}
+
+.current-user-rank h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #f1c40f, #e67e22);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+.current-user-rank p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  margin: 40px 0;
+}
+
+.empty-state p {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.loading {
+  text-align: center;
+  padding: 80px;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+.rank {
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+}
+
+.username {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 18px;
+}
+
+.score {
+  font-weight: 800;
+  background: linear-gradient(135deg, #f1c40f, #e67e22);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
+  font-size: 20px;
+}
+
+.problems-solved {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
 }

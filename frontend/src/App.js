@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Problems from './pages/Problems';
-import SimpleProblems from './pages/SimpleProblems';
 import Leaderboard from './pages/Leaderboard';
-import Solved from './pages/Solved';
+import SolvedProblems from './pages/SolvedProblems';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminProblems from './pages/AdminProblems';
 import ProblemForm from './pages/ProblemForm';
+import FindUser from './pages/FindUser';
 import Sidebar from './components/Sidebar';
 import './App.css';
 
@@ -25,20 +25,21 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/problems" element={<Problems />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/solved" element={<Solved />} />
+            <Route path="/solved" element={<SolvedProblems />} />
             <Route path="/profile" element={<Profile />} />
-            
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/problems" element={<AdminProblems />} />
-            <Route path="/admin/problems/new" element={<ProblemForm />} />
-            <Route path="/admin/problems/edit/:id" element={<ProblemForm />} />
-          </Routes>
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/problems" element={<AdminProblems />} />
+              <Route path="/admin/problems/new" element={<ProblemForm />} />
+              <Route path="/admin/problems/edit/:id" element={<ProblemForm />} />
+              <Route path="/admin/find-user" element={<FindUser />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
-  );
+      </Router>
+    );
 }
 
 export default App;

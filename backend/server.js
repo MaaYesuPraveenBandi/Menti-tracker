@@ -4,9 +4,9 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const problemRoutes = require('./routes/problemRoutes');
 const progressRoutes = require('./routes/progressRoutes');
-const timeProgressRoutes = require('./routes/timeProgressRoutes');
 const leaderboardRoutes = require('./routes/leaderboardRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -21,9 +21,9 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/problems', problemRoutes);
 app.use('/api/progress', progressRoutes);
-app.use('/api/time-progress', timeProgressRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/user', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 

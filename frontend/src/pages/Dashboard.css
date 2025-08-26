@@ -84,28 +84,130 @@
   50% { opacity: 1; transform: scale(1.05); }
 }
 
-.stats-grid {
+.dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 40px;
   margin-bottom: 60px;
   perspective: 1000px;
 }
 
-.stat-card {
+.progress-card, .recent-activity-card {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(30px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 45px;
   border-radius: 28px;
-  text-align: center;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
   box-shadow: 
     0 25px 50px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  animation: float 8s ease-in-out infinite;
+}
+
+.progress-card:hover, .recent-activity-card:hover {
+  transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+  box-shadow: 
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(255, 107, 107, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.card-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 30px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.progress-chart {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto 30px;
+}
+
+.difficulty-breakdown {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.difficulty-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.difficulty-label {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.difficulty-count {
+  font-size: 24px;
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: white;
+}
+
+.difficulty-count.easy { background: #2ecc71; box-shadow: 0 0 20px rgba(46, 204, 113, 0.5); }
+.difficulty-count.medium { background: #f39c12; box-shadow: 0 0 20px rgba(243, 156, 18, 0.5); }
+.difficulty-count.hard { background: #e74c3c; box-shadow: 0 0 20px rgba(231, 76, 60, 0.5); }
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(10px);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.activity-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+}
+
+.activity-difficulty {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .stat-card::before {
@@ -166,7 +268,7 @@
 
 .stat-card h3 {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 2px;
+  font-size: 20px;
   font-weight: 700;
   margin-bottom: 25px;
   text-transform: uppercase;
@@ -272,7 +374,7 @@
 }
 
 .activity-list::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(229, 9, 9, 0.1);
   border-radius: 6px;
 }
 
@@ -284,7 +386,7 @@
 
 .activity-list::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #bb6bd9, #ff6b6b);
-  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .activity-item {
@@ -343,7 +445,7 @@
 
 .activity-title {
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(0, 0, 0, 0.388);
   font-size: 20px;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   margin-bottom: 8px;

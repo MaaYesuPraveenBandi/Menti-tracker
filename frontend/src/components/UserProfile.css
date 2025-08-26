@@ -1,0 +1,126 @@
+.user-profile-details {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: rgba(17, 24, 39, 0.8);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    color: #fff;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 2rem;
+    border: 3px solid #007bff;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.profile-info p {
+    margin: 0;
+    font-size: 1rem;
+    color: #ccc;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.progress-card {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.progress-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.difficulty-stats {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 10px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.stat-item p {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.stat-item.easy h4 { color: #28a745; }
+.stat-item.medium h4 { color: #ffc107; }
+.stat-item.hard h4 { color: #dc3545; }
+
+.recent-activity {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 10px;
+}
+
+.recent-activity h3 {
+    margin-top: 0;
+}
+
+.recent-activity ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recent-activity li {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.recent-activity li:last-child {
+    border-bottom: none;
+}
+
+.recent-activity a {
+    color: #00aaff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.recent-activity a:hover {
+    color: #007bff;
+}
+
+.recent-activity span {
+    font-size: 0.9rem;
+    color: #ccc;
+}

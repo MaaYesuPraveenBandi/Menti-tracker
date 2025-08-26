@@ -8,26 +8,27 @@ const Sidebar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   
   const menuItems = [
-    { path: '/dashboard', icon: '📊', label: 'Dashboard' },
-    { path: '/problems', icon: '🧩', label: 'Problems' },
-    { path: '/solved', icon: '✅', label: 'Solved' },
+    { path: '/dashboard', icon: '', label: 'Dashboard' },
+    { path: '/problems', icon: '', label: 'Problems' },
+    { path: '/solved', icon: '', label: 'Solved' },
     { path: '/leaderboard', icon: '🏆', label: 'Leaderboard' },
-    { path: '/profile', icon: '👤', label: 'Profile' }
   ];
 
   const adminMenuItems = [
-    { path: '/admin/dashboard', icon: '⚡', label: 'Admin Dashboard' },
-    { path: '/admin/problems', icon: '📝', label: 'Manage Problems' },
-    { path: '/admin/problems/new', icon: '➕', label: 'Add Problem' }
+    { path: '/admin/dashboard', icon: '', label: 'Admin Dashboard' },
+    { path: '/admin/problems', icon: '', label: 'Manage Problems' },
+    { path: '/admin/problems/new', icon: '', label: 'Add Problem' }
   ];
 
   useEffect(() => {
+    // TEMPORARY: Enable admin access for testing
+    // Remove this when you have proper authentication
+    setIsAdmin(true);
+    
     // Only check admin status if user is logged in
     const token = localStorage.getItem('token');
     if (token) {
       checkAdminStatus();
-    } else {
-      setIsAdmin(false);
     }
   }, []);
 
@@ -102,8 +103,9 @@ const Sidebar = () => {
       
       <div className="sidebar-footer">
         <button onClick={handleLogout} className="logout-btn">
-          <span className="nav-icon">🚪</span>
           <span className="nav-label">Logout</span>
+          <span className="nav-icon"></span>
+          
         </button>
       </div>
     </div>

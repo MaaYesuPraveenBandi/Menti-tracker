@@ -1,54 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import api from '../utils/api';
 import './Problems.css';
 
 const Problems = () => {
   const [problems, setProblems] = useState([]);
-  const [filteredProblems, setFilteredProblems] = useState([]);
-  const [solvedProblems, setSolvedProblems] = useState([]);
+  const [userProgress, setUserProgress] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     difficulty: 'All',
     category: 'All'
   });
-  const [loading, setLoading] = useState(true);
-  const [solvedCount, setSolvedCount] = useState(0);
 
   useEffect(() => {
-    fetchProblems();
-    fetchSolvedProblems();
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    filterProblems();
-  }, [problems, filters]);
-
-  useEffect(() => {
-    setSolvedCount(solvedProblems.length);
-  }, [solvedProblems]);
-
-  const fetchProblems = async () => {
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const res = await api.get('/problems');
-      setProblems(res.data);
-      setFilteredProblems(res.data);
+      const [problemsRes, progressRes] = await Promise.all([
+        api.get('/problems'),
+        api.get('/progress/user')
+      ]);
+      
+      setProblems(problemsRes.data);
+      setUserProgress(progressRes.data);
     } catch (err) {
-      console.error('Error fetching problems:', err);
-      alert('Error loading problems. Please try again.');
+      console.error('Error fetching data:', err);
+      if (err.response?.status === 401) {
+        alert('Please log in again');
+        window.location.href = '/login';
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const fetchSolvedProblems = async () => {
-    try {
-      const res = await api.get('/progress/user');
-      setSolvedProblems(res.data.solvedProblems.map(sp => sp.problemId));
-    } catch (err) {
-      console.error('Error fetching solved problems:', err);
+  const solvedProblemIds = useMemo(() => {
+    if (!userProgress || !userProgress.user || !userProgress.user.solvedProblems) {
+      return new Set();
     }
-    setLoading(false);
-  };
+    
+    const ids = new Set(userProgress.user.solvedProblems.map(sp => {
+      // Handle populated problemId (object) vs unpopulated (string)
+      const id = sp.problemId && sp.problemId._id ? sp.problemId._id : sp.problemId;
+      return id;
+    }));
+    return ids;
+  }, [userProgress]);
 
-  const filterProblems = () => {
+  const filteredProblems = useMemo(() => {
+    if (!problems) return [];
+    
     let filtered = problems;
+
+    // Don't filter out solved problems - show all problems with different states
+    // filtered = filtered.filter(problem => !solvedProblemIds.has(problem._id));
 
     if (filters.difficulty !== 'All') {
       filtered = filtered.filter(problem => problem.difficulty === filters.difficulty);
@@ -58,8 +65,8 @@ const Problems = () => {
       filtered = filtered.filter(problem => problem.category === filters.category);
     }
 
-    setFilteredProblems(filtered);
-  };
+    return filtered;
+  }, [problems, filters]);
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({
@@ -69,27 +76,19 @@ const Problems = () => {
   };
 
   const handleSolveToggle = async (problemId) => {
+    const isSolved = solvedProblemIds.has(problemId);
+    const endpoint = isSolved ? '/progress/unsolve' : '/progress/solve';
+    const alertMessage = isSolved ? 'Problem unmarked as solved! ✅' : 'Problem marked as solved! 🎉';
+
     try {
-      const isSolved = solvedProblems.includes(problemId);
+      const response = await api.post(endpoint, { problemId });
       
-      if (isSolved) {
-        // Unsolve the problem
-        const res = await api.post('/progress/unsolve', { problemId });
-        
-        if (res.status === 200) {
-          setSolvedProblems(prev => prev.filter(id => id !== problemId));
-          alert('Problem unmarked as solved! ✅');
-        }
-      } else {
-        // Solve the problem
-        const res = await api.post('/progress/solve', { problemId });
-        
-        if (res.status === 200) {
-          setSolvedProblems(prev => [...prev, problemId]);
-          alert('Problem marked as solved! 🎉');
-        }
-      }
+      // Refresh data after successful update
+      await fetchData();
+      
+      alert(alertMessage);
     } catch (err) {
+      console.error('Error details:', err.response?.data || err.message);
       if (err.response?.data?.msg) {
         alert(err.response.data.msg);
       } else {
@@ -99,21 +98,27 @@ const Problems = () => {
     }
   };
 
-  const getDifficultyDisplay = (difficulty) => {
-    switch (difficulty) {
-      case 'Easy': return '🟢 Easy';
-      case 'Medium': return '🟡 Medium';
-      case 'Hard': return '🔴 Hard';
-      default: return difficulty;
-    }
+  const getDifficultyBadge = (difficulty) => {
+    const badges = {
+      Easy: { emoji: '🟢', class: 'easy' },
+      Medium: { emoji: '🟡', class: 'medium' },
+      Hard: { emoji: '🔴', class: 'hard' }
+    };
+    return badges[difficulty] || { emoji: '⚪', class: 'unknown' };
   };
 
   const isProblemSolved = (problemId) => {
-    return solvedProblems.includes(problemId);
+    return solvedProblemIds.has(problemId);
   };
 
-  if (loading) {
+  const isLoading = loading;
+
+  if (isLoading) {
     return <div className="loading">Loading problems...</div>;
+  }
+
+  if (!problems || !userProgress) {
+    return <div className="problems"><div className="no-problems"><p>Error loading problems. Please try again.</p></div></div>;
   }
 
   return (
@@ -122,7 +127,7 @@ const Problems = () => {
         <h1>Coding Problems</h1>
         <div className="problems-stats">
           <span className="solved-counter">
-            Solved: <strong>{solvedCount}</strong> / {problems.length}
+            Solved: <strong>{solvedProblemIds.size}</strong> / {problems.length}
           </span>
         </div>
       </div>
@@ -166,49 +171,61 @@ const Problems = () => {
             <p>No problems found. {filters.difficulty !== 'All' || filters.category !== 'All' ? 'Try adjusting your filters.' : 'Ask admin to add some problems.'}</p>
           </div>
         ) : (
-          filteredProblems.map(problem => (
-            <div key={problem._id} className={`problem-item ${isProblemSolved(problem._id) ? 'solved' : ''}`}>
-              <div className="problem-checkbox">
-                <input
-                  type="checkbox"
-                  id={`problem-${problem._id}`}
-                  checked={isProblemSolved(problem._id)}
-                  onChange={() => handleSolveToggle(problem._id)}
-                />
-                <label htmlFor={`problem-${problem._id}`}></label>
-              </div>
-              
-              <div className="problem-content">
-                <div className="problem-info">
-                  <h3 className={`problem-title ${isProblemSolved(problem._id) ? 'strikethrough' : ''}`}>
-                    {problem.title}
-                  </h3>
-                  <div className="problem-meta">
-                    <span className="difficulty-badge">
-                      {getDifficultyDisplay(problem.difficulty)}
+          filteredProblems.map((problem, index) => {
+            const difficultyInfo = getDifficultyBadge(problem.difficulty);
+            const isSolved = isProblemSolved(problem._id);
+            
+            return (
+              <div key={problem._id} className={`problem-card ${difficultyInfo.class} ${isSolved ? 'solved-card' : ''}`} style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="problem-header">
+                  <div className="problem-checkbox">
+                    <input
+                      type="checkbox"
+                      id={`problem-${problem._id}`}
+                      checked={isSolved}
+                      onChange={() => handleSolveToggle(problem._id)}
+                    />
+                    <label htmlFor={`problem-${problem._id}`} className="checkbox-label">
+                      <span className="checkmark">✓</span>
+                    </label>
+                  </div>
+                  <div className="problem-badges">
+                    <span className={`difficulty-badge ${difficultyInfo.class}`}>
+                      {difficultyInfo.emoji} {problem.difficulty}
                     </span>
-                    <span className="category-badge">{problem.category}</span>
-                    <span className="points-badge">{problem.points} pts</span>
+                    <span className="points-badge">
+                      ⭐ {problem.points}
+                    </span>
                   </div>
                 </div>
                 
-                <div className="problem-actions">
+                <div className="problem-body">
+                  <h3 className="problem-title">{problem.title}</h3>
+                  <div className="problem-meta">
+                    <span className="category">{problem.category || 'General'}</span>
+                  </div>
+                </div>
+                
+                <div className="problem-footer">
                   {problem.problemLink ? (
                     <a 
                       href={problem.problemLink} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="solve-link"
+                      className="problem-link"
                     >
-                      Solve Problem →
+                      <span>Solve Problem</span>
+                      <span className="link-arrow">→</span>
                     </a>
                   ) : (
-                    <span className="no-link">Link Not Available</span>
+                    <span className="no-link">No Link Available</span>
                   )}
                 </div>
+                
+                <div className="problem-glow"></div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

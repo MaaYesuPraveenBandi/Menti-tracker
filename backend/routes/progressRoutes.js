@@ -46,7 +46,7 @@ router.post('/solve', auth, async (req, res) => {
 });
 
 // @route   POST api/progress/unsolve
-// @desc    Unmark a problem as solved
+// @desc    Mark a problem as unsolved
 // @access  Private
 router.post('/unsolve', auth, async (req, res) => {
   const { problemId } = req.body;
@@ -59,18 +59,23 @@ router.post('/unsolve', auth, async (req, res) => {
       return res.status(404).json({ msg: 'Problem not found' });
     }
 
-    // Check if problem is actually solved
-    const solvedIndex = user.solvedProblems.findIndex(
+    // Find the solved problem entry
+    const solvedProblemIndex = user.solvedProblems.findIndex(
       p => p.problemId.toString() === problemId
     );
 
-    if (solvedIndex === -1) {
+    if (solvedProblemIndex === -1) {
       return res.status(400).json({ msg: 'Problem not solved yet' });
     }
 
     // Remove from user's solved problems
-    user.solvedProblems.splice(solvedIndex, 1);
+    user.solvedProblems.splice(solvedProblemIndex, 1);
     user.totalScore -= problem.points;
+
+    // Ensure score doesn't go below 0
+    if (user.totalScore < 0) {
+      user.totalScore = 0;
+    }
 
     // Remove user from problem's solvedBy array
     problem.solvedBy = problem.solvedBy.filter(
@@ -80,20 +85,55 @@ router.post('/unsolve', auth, async (req, res) => {
     await user.save();
     await problem.save();
 
-    res.json({ msg: 'Problem unmarked as solved', totalScore: user.totalScore });
+    res.json({ msg: 'Problem marked as unsolved', totalScore: user.totalScore });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
+
 // @route   GET api/progress/user
 // @desc    Get user's progress
 // @access  Private
 router.get('/user', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id)
-      .populate('solvedProblems.problemId', 'title difficulty points category');
+    const user = await User.findById(req.user.id);
+    
+    // Get all existing problem IDs to validate solved problems
+    const existingProblems = await Problem.find({}, '_id');
+    const existingProblemIds = new Set(existingProblems.map(p => p._id.toString()));
+    
+    // Filter out solved problems where the problem no longer exists
+    const validSolvedProblems = user.solvedProblems.filter(solved => 
+      existingProblemIds.has(solved.problemId.toString())
+    );
+    
+    // If there are invalid references, clean them up
+    let needsUpdate = false;
+    if (validSolvedProblems.length !== user.solvedProblems.length) {
+      user.solvedProblems = validSolvedProblems;
+      needsUpdate = true;
+    }
+    
+    // Populate the valid solved problems with their details
+    await user.populate('solvedProblems.problemId', 'title difficulty points category');
+    
+    // Recalculate total score based on valid problems only
+    const calculatedScore = user.solvedProblems.reduce((total, solved) => {
+      return total + (solved.problemId ? solved.problemId.points : 0);
+    }, 0);
+    
+    // Update score if it's different
+    if (user.totalScore !== calculatedScore) {
+      user.totalScore = calculatedScore;
+      needsUpdate = true;
+    }
+    
+    // Save if any updates were made
+    if (needsUpdate) {
+      await user.save();
+    }
     
     const totalProblems = await Problem.countDocuments();
     const solvedCount = user.solvedProblems.length;

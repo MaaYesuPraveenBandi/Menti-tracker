@@ -7,7 +7,6 @@ const ProblemSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    default: ''
   },
   difficulty: {
     type: String,
@@ -16,7 +15,6 @@ const ProblemSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    default: 'General'
   },
   points: {
     type: Number,
@@ -32,10 +30,6 @@ const ProblemSchema = new mongoose.Schema({
   }],
   constraints: {
     type: String
-  },
-  problemLink: {
-    type: String,
-    required: true
   },
   examples: [{
     input: String,

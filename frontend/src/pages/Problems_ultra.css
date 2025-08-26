@@ -196,14 +196,15 @@
   transition: transform 0.8s ease;
 }
 
-.problem-card:hover {
-  transform: translateY(-15px) scale(1.02);
+ .problem-card:hover {
+  /* Disable movement and scale on hover */
+  transform: none;
   box-shadow: 
     0 40px 80px rgba(0, 0, 0, 0.5),
     0 0 60px rgba(255, 107, 107, 0.3),
     0 0 0 1px rgba(255, 255, 255, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
+ }  
 
 .problem-card:hover::after {
   transform: rotate(45deg) translateX(100%);

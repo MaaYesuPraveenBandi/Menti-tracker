@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import './Problems.css';
 
-const Problems = () => {
+const TimeLockProblems = () => {
   const [problems, setProblems] = useState([]);
   const [filteredProblems, setFilteredProblems] = useState([]);
   const [problemStatus, setProblemStatus] = useState({}); // Track status of each problem
@@ -377,4 +377,4 @@ const Problems = () => {
   );
 };
 
-export default Problems;
+export default TimeLockProblems;

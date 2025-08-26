@@ -94,6 +94,17 @@ const AdminDashboard = () => {
         </div>
 
         <div className="action-card">
+          <h3>🔍 Find User</h3>
+          <p>Search for a user and view their profile</p>
+          <button 
+            className="btn-info"
+            onClick={() => navigate('/admin/find-user')}
+          >
+            Find User
+          </button>
+        </div>
+
+        <div className="action-card">
           <h3>➕ Add New Problem</h3>
           <p>Create a new coding problem with platform link</p>
           <button 

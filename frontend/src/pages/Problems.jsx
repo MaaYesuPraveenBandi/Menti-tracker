@@ -12,9 +12,20 @@ const Problems = () => {
   });
   const [loading, setLoading] = useState(true);
   const [countdowns, setCountdowns] = useState({}); // For countdown timers
+  const [solvedIds, setSolvedIds] = useState([]);
 
   useEffect(() => {
     fetchProblems();
+    // Fetch list of solved problem IDs for current user
+    const fetchSolved = async () => {
+      try {
+        const res = await api.get('/progress/solved-ids');
+        setSolvedIds(res.data);
+      } catch (err) {
+        console.error('Error fetching solved IDs:', err);
+      }
+    };
+    fetchSolved();
   }, []);
 
   useEffect(() => {
@@ -177,6 +188,15 @@ const Problems = () => {
     } catch (err) {
       console.error('Error unsolving problem:', err);
       alert(err.response?.data?.msg || 'Error unsolving problem');
+    }
+  };
+
+  const handleSolve = async (pid) => {
+    try {
+      await api.post('/progress/solve', { problemId: pid });
+      setSolvedIds(prev => [...prev, pid]);
+    } catch (err) {
+      console.error('Error marking solved:', err);
     }
   };
 
@@ -348,7 +368,16 @@ const Problems = () => {
 
       <div className="problems-list">
         {filteredProblems.map(problem => (
-          <div key={problem._id} className={`problem-card ${problemStatus[problem._id]?.status || ''}`}>
+          <div key={problem._id} className="problem-card">
+            <div className="solve-checkbox">
+              <input
+                type="checkbox"
+                checked={solvedIds.includes(problem._id)}
+                disabled={solvedIds.includes(problem._id)}
+                onChange={() => handleSolve(problem._id)}
+              />
+              <label>{solvedIds.includes(problem._id) ? '✔ Solved' : 'Mark as Solved'}</label>
+            </div>
             <div className="problem-header">
               <div className="problem-title-section">
                 <h3>{problem.title}</h3>
