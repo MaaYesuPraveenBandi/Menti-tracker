@@ -43,7 +43,7 @@
   font-size: 48px;
   font-weight: 900;
   margin: 0;
-  background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcf7f, #4d9de0, #bb6bd9);
+  background: linear-gradient(135deg, #ff8c00, #ffa500, #ff8c00, #ffa500, #ff8c00);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -224,10 +224,10 @@
   left: 0;
   right: 0;
   height: 6px;
-  background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcf7f, #4d9de0, #bb6bd9);
+  background: linear-gradient(135deg, #ff8c00, #ffa500, #ff8c00, #ffa500, #ff8c00);
   background-size: 300% 300%;
   animation: gradientShift 8s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
 }
 
 .problem-card::after {

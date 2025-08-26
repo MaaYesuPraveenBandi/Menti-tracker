@@ -6,18 +6,19 @@ import './Sidebar.css';
 const Sidebar = () => {
   const location = useLocation();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   
   const menuItems = [
-    { path: '/dashboard', icon: '', label: 'Dashboard' },
-    { path: '/problems', icon: '', label: 'Problems' },
-    { path: '/solved', icon: '', label: 'Solved' },
+    { path: '/dashboard', icon: '📊', label: 'Dashboard' },
+    { path: '/problems', icon: '💻', label: 'Problems' },
+    { path: '/solved', icon: '✅', label: 'Solved' },
     { path: '/leaderboard', icon: '🏆', label: 'Leaderboard' },
   ];
 
   const adminMenuItems = [
-    { path: '/admin/dashboard', icon: '', label: 'Admin Dashboard' },
-    { path: '/admin/problems', icon: '', label: 'Manage Problems' },
-    { path: '/admin/problems/new', icon: '', label: 'Add Problem' }
+    { path: '/admin/dashboard', icon: '⚙️', label: 'Admin Dashboard' },
+    { path: '/admin/problems', icon: '📝', label: 'Manage Problems' },
+    { path: '/admin/problems/new', icon: '➕', label: 'Add Problem' }
   ];
 
   useEffect(() => {
@@ -59,15 +60,28 @@ const Sidebar = () => {
     window.location.href = '/login';
   };
 
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   // Don't show sidebar on login page
   if (location.pathname === '/login') {
     return null;
   }
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
-        <h2>Mentiby Tracker</h2>
+        <div className="logo-section">
+          <button className="toggle-btn" onClick={toggleSidebar}>
+            <span className="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+          {!isCollapsed && <h2 className="brand-title">MentiBY Tracker</h2>}
+        </div>
       </div>
       
       <nav className="sidebar-nav">
@@ -76,25 +90,29 @@ const Sidebar = () => {
             key={item.path}
             to={item.path}
             className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+            title={isCollapsed ? item.label : ''}
           >
             <span className="nav-icon">{item.icon}</span>
-            <span className="nav-label">{item.label}</span>
+            {!isCollapsed && <span className="nav-label">{item.label}</span>}
           </Link>
         ))}
         
         {isAdmin && (
           <>
-            <div className="nav-divider">
-              <span>Admin Panel</span>
-            </div>
+            {!isCollapsed && (
+              <div className="nav-divider">
+                <span>Admin Panel</span>
+              </div>
+            )}
             {adminMenuItems.map(item => (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`nav-item admin-item ${location.pathname === item.path ? 'active' : ''}`}
+                title={isCollapsed ? item.label : ''}
               >
                 <span className="nav-icon">{item.icon}</span>
-                <span className="nav-label">{item.label}</span>
+                {!isCollapsed && <span className="nav-label">{item.label}</span>}
               </Link>
             ))}
           </>
@@ -102,10 +120,9 @@ const Sidebar = () => {
       </nav>
       
       <div className="sidebar-footer">
-        <button onClick={handleLogout} className="logout-btn">
-          <span className="nav-label">Logout</span>
-          <span className="nav-icon"></span>
-          
+        <button onClick={handleLogout} className="logout-btn" title={isCollapsed ? 'Logout' : ''}>
+          {!isCollapsed && <span className="nav-label">Logout</span>}
+          <span className="nav-icon">🚪</span>
         </button>
       </div>
     </div>

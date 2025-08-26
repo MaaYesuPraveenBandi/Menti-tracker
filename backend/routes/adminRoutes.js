@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Problem = require('../models/Problem');
+const User = require('../models/User');
 const auth = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
 
@@ -112,6 +113,41 @@ router.delete('/problems/:id', [auth, adminAuth], async (req, res) => {
     res.json({ 
       msg: 'Problem removed and cleaned up from all user records',
       usersAffected: users.length
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT /api/admin/users/:id/cohort
+// @desc    Update user cohort (admin only)
+// @access  Private
+router.put('/users/:id/cohort', [auth, adminAuth], async (req, res) => {
+  try {
+    const { cohort } = req.body;
+    
+    // Validate cohort value
+    const validCohorts = ['Basic', 'Intermediate', 'Advanced', 'Placement'];
+    if (!validCohorts.includes(cohort)) {
+      return res.status(400).json({ msg: 'Invalid cohort value' });
+    }
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    user.cohort = cohort;
+    await user.save();
+
+    res.json({
+      msg: 'User cohort updated successfully',
+      user: {
+        id: user._id,
+        username: user.username,
+        cohort: user.cohort
+      }
     });
   } catch (err) {
     console.error(err.message);

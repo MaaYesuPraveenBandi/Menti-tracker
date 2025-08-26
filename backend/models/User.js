@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  cohort: {
+    type: String,
+    enum: ['Basic', 'Intermediate', 'Advanced', 'Placement'],
+    required: true
+  },
   solvedProblems: [{
     problemId: {
       type: mongoose.Schema.Types.ObjectId,

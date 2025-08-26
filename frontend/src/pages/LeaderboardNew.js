@@ -5,6 +5,7 @@ const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentUserRank, setCurrentUserRank] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
   const [stats, setStats] = useState({
     totalStudents: 0,
     topXP: 0,
@@ -28,8 +29,8 @@ const Leaderboard = () => {
         
         setStats({
           totalStudents,
-          topXP,
-          avgXP
+          topXP: topXP,
+          avgXP: Math.min(...res.data.map(user => user.totalScore)) // Min score instead of avg
         });
       }
       
@@ -61,31 +62,50 @@ const Leaderboard = () => {
     }
   };
 
-  const getRankCardStyle = (rank) => {
+  const getRankCardStyle = (rank, isHovered = false) => {
+    const baseTransform = isHovered ? 'translateY(-5px) scale(1.02)' : 'translateY(0) scale(1)';
+    
     if (rank === 1) {
       return {
         ...styles.leaderboardCard,
-        background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-        border: '2px solid #FFD700',
-        boxShadow: '0 8px 25px rgba(255, 215, 0, 0.3)',
-        transform: 'translateY(-2px)'
+        background: 'linear-gradient(135deg, #FF8C00 0%, #FFA500 50%, #FF8C00 100%)',
+        border: '2px solid #FF8C00',
+        boxShadow: isHovered 
+          ? '0 15px 40px rgba(255, 140, 0, 0.6), 0 0 30px rgba(255, 140, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+          : '0 8px 25px rgba(255, 140, 0, 0.4), 0 0 20px rgba(255, 140, 0, 0.2)',
+        transform: baseTransform,
+        animation: 'orangeGlow 3s ease-in-out infinite alternate'
       };
     } else if (rank === 2) {
       return {
         ...styles.leaderboardCard,
-        background: 'linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%)',
+        background: 'linear-gradient(135deg, #E5E5E5 0%, #C0C0C0 50%, #E5E5E5 100%)',
         border: '2px solid #C0C0C0',
-        boxShadow: '0 6px 20px rgba(192, 192, 192, 0.2)'
+        boxShadow: isHovered 
+          ? '0 12px 35px rgba(192, 192, 192, 0.5), 0 0 25px rgba(192, 192, 192, 0.3)'
+          : '0 6px 20px rgba(192, 192, 192, 0.3), 0 0 15px rgba(192, 192, 192, 0.1)',
+        transform: baseTransform,
+        animation: 'silverGlow 4s ease-in-out infinite alternate'
       };
     } else if (rank === 3) {
       return {
         ...styles.leaderboardCard,
-        background: 'linear-gradient(135deg, #CD7F32 0%, #B8860B 100%)',
+        background: 'linear-gradient(135deg, #D4A574 0%, #CD7F32 50%, #D4A574 100%)',
         border: '2px solid #CD7F32',
-        boxShadow: '0 6px 20px rgba(205, 127, 50, 0.2)'
+        boxShadow: isHovered 
+          ? '0 12px 35px rgba(205, 127, 50, 0.5), 0 0 25px rgba(205, 127, 50, 0.3)'
+          : '0 6px 20px rgba(205, 127, 50, 0.3), 0 0 15px rgba(205, 127, 50, 0.1)',
+        transform: baseTransform,
+        animation: 'bronzeGlow 5s ease-in-out infinite alternate'
       };
     }
-    return styles.leaderboardCard;
+    return {
+      ...styles.leaderboardCard,
+      transform: baseTransform,
+      boxShadow: isHovered 
+        ? '0 10px 30px rgba(62, 80, 180, 0.4), 0 0 20px rgba(62, 80, 180, 0.2)'
+        : '0 4px 15px rgba(62, 80, 180, 0.2)'
+    };
   };
 
   const getTextColor = (rank) => {
@@ -107,15 +127,23 @@ const Leaderboard = () => {
       <div style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.titleSection}>
-            <h1 style={styles.title}>🏆 Student XP Leaderboard</h1>
-            <p style={styles.subtitle}>Rankings based on Codedamn platform experience points</p>
+            <h1 style={styles.title}>🏆 Student Score Leaderboard</h1>
+            <p style={styles.subtitle}>Rankings based on MentiBY DSA sheet solved points</p>
             <p style={styles.updateTime}>Updated: {new Date().toLocaleString()}</p>
           </div>
         </div>
         
         {/* Statistics Cards */}
         <div style={styles.statsGrid}>
-          <div style={styles.statCard}>
+          <div style={styles.statCard} 
+               onMouseEnter={(e) => {
+                 e.target.style.transform = 'translateY(-3px)';
+                 e.target.style.boxShadow = '0 8px 25px rgba(74, 90, 149, 0.4), 0 0 20px rgba(74, 90, 149, 0.2)';
+               }}
+               onMouseLeave={(e) => {
+                 e.target.style.transform = 'translateY(0)';
+                 e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+               }}>
             <div style={styles.statIcon}>👥</div>
             <div style={styles.statContent}>
               <div style={styles.statLabel}>Total Students</div>
@@ -123,18 +151,41 @@ const Leaderboard = () => {
             </div>
           </div>
           
-          <div style={styles.statCard}>
+          <div style={{...styles.statCard, ...styles.goldStatCard}} 
+               onMouseEnter={(e) => {
+                 e.target.style.transform = 'translateY(-3px)';
+                 e.target.style.boxShadow = '0 8px 25px rgba(255, 140, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.3)';
+               }}
+               onMouseLeave={(e) => {
+                 e.target.style.transform = 'translateY(0)';
+                 e.target.style.boxShadow = '0 4px 15px rgba(255, 140, 0, 0.2), 0 0 10px rgba(255, 140, 0, 0.1)';
+               }}>
             <div style={styles.statIcon}>👑</div>
             <div style={styles.statContent}>
-              <div style={styles.statLabel}>Top XP</div>
-              <div style={styles.statValue}>{stats.topXP.toLocaleString()}</div>
+              <div style={styles.statLabel}>Current Champion</div>
+              <div style={{...styles.statValue, color: '#FF8C00'}}>
+                {stats.topXP.toLocaleString()}
+              </div>
+              {leaderboard.length > 0 && (
+                <div style={styles.championName}>
+                  {leaderboard[0].username}
+                </div>
+              )}
             </div>
           </div>
           
-          <div style={styles.statCard}>
+          <div style={styles.statCard}
+               onMouseEnter={(e) => {
+                 e.target.style.transform = 'translateY(-3px)';
+                 e.target.style.boxShadow = '0 8px 25px rgba(74, 90, 149, 0.4), 0 0 20px rgba(74, 90, 149, 0.2)';
+               }}
+               onMouseLeave={(e) => {
+                 e.target.style.transform = 'translateY(0)';
+                 e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+               }}>
             <div style={styles.statIcon}>⚡</div>
             <div style={styles.statContent}>
-              <div style={styles.statLabel}>Avg XP</div>
+              <div style={styles.statLabel}>Min Score</div>
               <div style={styles.statValue}>{stats.avgXP}</div>
             </div>
           </div>
@@ -144,47 +195,64 @@ const Leaderboard = () => {
       {/* Leaderboard Table Header */}
       <div style={styles.tableHeader}>
         <div style={styles.headerCell}>Rank</div>
-        <div style={styles.headerCell}>ID</div>
         <div style={styles.headerCell}>Name</div>
-        <div style={styles.headerCell}>Cohort</div>
-        <div style={styles.headerCell}>Batch</div>
-        <div style={styles.headerCell}>XP</div>
+        <div style={styles.headerCell}>Score</div>
       </div>
 
       {/* Leaderboard Cards */}
       <div style={styles.leaderboardContainer}>
         {leaderboard.map((user, index) => (
-          <div key={user.username} style={getRankCardStyle(user.rank)}>
+          <div 
+            key={user.username} 
+            style={getRankCardStyle(user.rank, hoveredCard === user.rank)}
+            onMouseEnter={() => setHoveredCard(user.rank)}
+            onMouseLeave={() => setHoveredCard(null)}
+            onClick={() => {
+              // Add click animation
+              const card = document.getElementById(`card-${user.rank}`);
+              if (card) {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                  card.style.transform = hoveredCard === user.rank ? 'translateY(-5px) scale(1.02)' : 'scale(1)';
+                }, 150);
+              }
+            }}
+            id={`card-${user.rank}`}
+          >
             <div style={styles.rankSection}>
-              <div style={{...styles.rankNumber, color: getTextColor(user.rank)}}>
+              <div style={{
+                ...styles.rankNumber, 
+                color: getTextColor(user.rank),
+                textShadow: user.rank <= 3 ? '0 2px 4px rgba(0,0,0,0.3)' : 'none',
+                animation: hoveredCard === user.rank ? 'pulse 1.5s ease-in-out infinite' : 'none'
+              }}>
                 {user.rank}
               </div>
             </div>
             
-            <div style={{...styles.idSection, color: getTextColor(user.rank)}}>
-              USER{user.rank.toString().padStart(3, '0')}
-            </div>
-            
             <div style={styles.userInfo}>
-              <div style={{...styles.userName, color: getTextColor(user.rank)}}>
+              <div style={{
+                ...styles.userName, 
+                color: getTextColor(user.rank),
+                textShadow: user.rank <= 3 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none'
+              }}>
                 {user.username}
               </div>
-              <div style={{...styles.userEmail, color: getTextColor(user.rank)}}>
-                {user.username.toLowerCase()}@example.com
-              </div>
-            </div>
-            
-            <div style={styles.cohortBadge}>
-              <span style={styles.cohortText}>Basic</span>
-            </div>
-            
-            <div style={{...styles.batchInfo, color: getTextColor(user.rank)}}>
-              1.0
             </div>
             
             <div style={styles.xpSection}>
-              <div style={styles.xpIcon}>⚡</div>
-              <div style={{...styles.xpValue, color: getTextColor(user.rank)}}>
+              <div style={{
+                ...styles.xpIcon,
+                animation: hoveredCard === user.rank ? 'sparkle 1s ease-in-out infinite' : 'none'
+              }}>
+                ⚡
+              </div>
+              <div style={{
+                ...styles.xpValue, 
+                color: getTextColor(user.rank),
+                textShadow: user.rank <= 3 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none',
+                fontWeight: hoveredCard === user.rank ? '900' : 'bold'
+              }}>
                 {user.totalScore.toLocaleString()}
               </div>
             </div>
@@ -218,29 +286,35 @@ const styles = {
   },
   loadingText: {
     color: '#e0e6ed',
-    fontSize: '1.2rem'
+    fontSize: '1.2rem',
+    animation: 'pulse 2s ease-in-out infinite'
   },
   header: {
     padding: '30px',
     background: 'linear-gradient(135deg, #1e2044 0%, #2d3561 100%)',
-    borderBottom: '1px solid #2d3561'
+    borderBottom: '1px solid #2d3561',
+    position: 'relative',
+    overflow: 'hidden'
   },
   headerContent: {
     maxWidth: '1200px',
-    margin: '0 auto'
+    margin: '0 auto',
+    position: 'relative',
+    zIndex: 2
   },
   titleSection: {
-    textAlign: 'left',
+    textAlign: 'center',
     marginBottom: '30px'
   },
   title: {
     fontSize: '2.5rem',
     fontWeight: 'bold',
     margin: '0 0 10px 0',
-    background: 'linear-gradient(45deg, #FFD700, #FFA500)',
+    background: 'linear-gradient(45deg, #FF8C00, #FFA500, #FF8C00)',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    backgroundClip: 'text'
+    backgroundClip: 'text',
+    textShadow: '0 0 30px rgba(255, 140, 0, 0.5)'
   },
   subtitle: {
     fontSize: '1.1rem',
@@ -267,10 +341,18 @@ const styles = {
     alignItems: 'center',
     gap: '15px',
     border: '1px solid #2d3561',
-    transition: 'transform 0.2s ease'
+    transition: 'all 0.3s ease',
+    cursor: 'pointer',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)'
+  },
+  goldStatCard: {
+    background: 'linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%)',
+    border: '1px solid rgba(255, 140, 0, 0.3)',
+    boxShadow: '0 4px 15px rgba(255, 140, 0, 0.2), 0 0 10px rgba(255, 140, 0, 0.1)'
   },
   statIcon: {
-    fontSize: '2rem'
+    fontSize: '2rem',
+    filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))'
   },
   statContent: {
     flex: 1
@@ -283,12 +365,23 @@ const styles = {
   statValue: {
     fontSize: '1.8rem',
     fontWeight: 'bold',
-    color: '#e0e6ed'
+    color: '#e0e6ed',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
+  },
+  championName: {
+    color: '#FF8C00',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    marginTop: '5px',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
+    background: 'linear-gradient(45deg, #FF8C00, #FFA500)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
   },
   tableHeader: {
     display: 'grid',
-    gridTemplateColumns: '80px 120px 1fr 120px 80px 100px',
-    gap: '20px',
+    gridTemplateColumns: '100px 1fr 150px',
+    gap: '30px',
     padding: '20px 30px',
     backgroundColor: '#1e2044',
     borderBottom: '1px solid #2d3561',
@@ -309,16 +402,18 @@ const styles = {
   },
   leaderboardCard: {
     display: 'grid',
-    gridTemplateColumns: '80px 120px 1fr 120px 80px 100px',
-    gap: '20px',
+    gridTemplateColumns: '100px 1fr 150px',
+    gap: '30px',
     alignItems: 'center',
-    padding: '20px',
+    padding: '25px 30px',
     marginBottom: '8px',
     backgroundColor: '#1e2044',
     borderRadius: '12px',
     border: '1px solid #2d3561',
-    transition: 'all 0.3s ease',
-    cursor: 'pointer'
+    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    cursor: 'pointer',
+    position: 'relative',
+    overflow: 'hidden'
   },
   rankSection: {
     display: 'flex',
@@ -327,12 +422,13 @@ const styles = {
   },
   rankNumber: {
     fontSize: '1.5rem',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    transition: 'all 0.3s ease'
   },
   idSection: {
     fontSize: '0.9rem',
     fontWeight: '500',
-    opacity: 0.8
+    transition: 'all 0.3s ease'
   },
   userInfo: {
     display: 'flex',
@@ -341,20 +437,21 @@ const styles = {
   },
   userName: {
     fontSize: '1.1rem',
-    fontWeight: '600'
+    fontWeight: '600',
+    transition: 'all 0.3s ease'
   },
   userEmail: {
     fontSize: '0.85rem',
-    opacity: 0.7
+    transition: 'all 0.3s ease'
   },
   cohortBadge: {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#3b4779',
     borderRadius: '6px',
     padding: '6px 12px',
-    width: 'fit-content'
+    width: 'fit-content',
+    transition: 'all 0.3s ease'
   },
   cohortText: {
     fontSize: '0.8rem',
@@ -364,7 +461,8 @@ const styles = {
   batchInfo: {
     fontSize: '1rem',
     fontWeight: '500',
-    textAlign: 'center'
+    textAlign: 'center',
+    transition: 'all 0.3s ease'
   },
   xpSection: {
     display: 'flex',
@@ -373,11 +471,13 @@ const styles = {
     gap: '6px'
   },
   xpIcon: {
-    fontSize: '1.2rem'
+    fontSize: '1.2rem',
+    transition: 'all 0.3s ease'
   },
   xpValue: {
     fontSize: '1.1rem',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    transition: 'all 0.3s ease'
   },
   emptyState: {
     textAlign: 'center',
@@ -385,5 +485,42 @@ const styles = {
     color: '#8892b0'
   }
 };
+
+// Add CSS animations
+const styleSheet = document.createElement('style');
+styleSheet.type = 'text/css';
+styleSheet.innerText = `
+  @keyframes orangeGlow {
+    0% { box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4), 0 0 20px rgba(255, 140, 0, 0.2); }
+    100% { box-shadow: 0 12px 35px rgba(255, 140, 0, 0.6), 0 0 30px rgba(255, 140, 0, 0.4); }
+  }
+  
+  @keyframes silverGlow {
+    0% { box-shadow: 0 6px 20px rgba(192, 192, 192, 0.3), 0 0 15px rgba(192, 192, 192, 0.1); }
+    100% { box-shadow: 0 10px 30px rgba(192, 192, 192, 0.5), 0 0 25px rgba(192, 192, 192, 0.3); }
+  }
+  
+  @keyframes bronzeGlow {
+    0% { box-shadow: 0 6px 20px rgba(205, 127, 50, 0.3), 0 0 15px rgba(205, 127, 50, 0.1); }
+    100% { box-shadow: 0 10px 30px rgba(205, 127, 50, 0.5), 0 0 25px rgba(205, 127, 50, 0.3); }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+  }
+  
+  @keyframes sparkle {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-5deg) scale(1.1); }
+    75% { transform: rotate(5deg) scale(1.1); }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+`;
+document.head.appendChild(styleSheet);
 
 export default Leaderboard;

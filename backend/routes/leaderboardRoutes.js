@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const users = await User.find()
-      .select('username totalScore solvedProblems')
+      .select('username totalScore solvedProblems cohort')
       .sort({ totalScore: -1 })
       .limit(100);
 
@@ -17,7 +17,8 @@ router.get('/', async (req, res) => {
       rank: index + 1,
       username: user.username,
       totalScore: user.totalScore,
-      problemsSolved: user.solvedProblems.length
+      problemsSolved: user.solvedProblems.length,
+      cohort: user.cohort || 'Basic'
     }));
 
     res.json(leaderboard);
@@ -34,7 +35,7 @@ router.get('/top/:count', async (req, res) => {
   try {
     const count = parseInt(req.params.count) || 10;
     const users = await User.find()
-      .select('username totalScore solvedProblems')
+      .select('username totalScore solvedProblems cohort')
       .sort({ totalScore: -1 })
       .limit(count);
 
@@ -42,7 +43,8 @@ router.get('/top/:count', async (req, res) => {
       rank: index + 1,
       username: user.username,
       totalScore: user.totalScore,
-      problemsSolved: user.solvedProblems.length
+      problemsSolved: user.solvedProblems.length,
+      cohort: user.cohort || 'Basic'
     }));
 
     res.json(leaderboard);

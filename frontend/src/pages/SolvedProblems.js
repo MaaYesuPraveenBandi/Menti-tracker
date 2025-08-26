@@ -234,18 +234,31 @@ const styles = {
   topPerformerSection: {
     marginTop: '15px',
     padding: '15px',
-    backgroundColor: 'linear-gradient(135deg, #ffd700, #ffed4e)',
-    background: 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)',
-    borderRadius: '10px',
-    border: '2px solid #ffc107',
-    boxShadow: '0 4px 15px rgba(255, 215, 0, 0.3)'
+    background: 'linear-gradient(135deg, #ff8c00 0%, #ffa500 50%, #ff8c00 100%)',
+    backgroundSize: '200% 200%',
+    borderRadius: '12px',
+    border: '2px solid #ff8c00',
+    boxShadow: '0 8px 32px rgba(255, 140, 0, 0.3), 0 0 40px rgba(255, 140, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+    position: 'relative',
+    overflow: 'hidden',
+    animation: 'gradientShift 4s ease-in-out infinite',
+    '::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: '-100%',
+      width: '100%',
+      height: '100%',
+      background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+      animation: 'shimmer 3s infinite'
+    }
   },
   topPerformerTitle: {
-    color: '#b8860b',
+    color: '#2c3e50',
     fontSize: '1rem',
     margin: '0 0 8px 0',
     fontWeight: '600',
-    textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+    textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
   },
   topPerformerInfo: {
     display: 'flex',
@@ -254,19 +267,23 @@ const styles = {
     gap: '10px'
   },
   crownIcon: {
-    color: '#ffc107',
-    fontSize: '1.5rem',
-    textShadow: '0 2px 4px rgba(255, 193, 7, 0.5)'
+    color: '#ffd700',
+    fontSize: '1.8rem',
+    textShadow: '0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6), 0 2px 4px rgba(255, 140, 0, 0.5)',
+    filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))',
+    animation: 'pulse 2s ease-in-out infinite'
   },
   topPerformerName: {
-    color: '#ffd700',
+    color: '#2c3e50',
     fontSize: '1.2rem',
     fontWeight: 'bold',
-    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
-    background: 'linear-gradient(45deg, #ffd700, #ffed4e)',
+    textShadow: '0 2px 4px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.1)',
+    background: 'linear-gradient(45deg, #2c3e50, #34495e, #2c3e50)',
+    backgroundSize: '200% 200%',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))'
+    filter: 'drop-shadow(0 2px 4px rgba(255, 255, 255, 0.5)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
+    animation: 'shimmer 3s ease-in-out infinite'
   },
   topPerformerStats: {
     display: 'flex',
@@ -275,20 +292,22 @@ const styles = {
     marginTop: '5px'
   },
   topPerformerScore: {
-    color: '#ffd700',
+    color: '#2c3e50',
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
-    background: 'linear-gradient(45deg, #ffd700, #ffed4e)',
+    textShadow: '0 2px 4px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.1)',
+    background: 'linear-gradient(45deg, #2c3e50, #34495e, #2c3e50)',
+    backgroundSize: '200% 200%',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))'
+    filter: 'drop-shadow(0 2px 4px rgba(255, 255, 255, 0.5)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))',
+    animation: 'shimmer 3s ease-in-out infinite'
   },
   topPerformerSeparator: {
-    color: '#ffd700',
+    color: '#2c3e50',
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
+    textShadow: '0 1px 3px rgba(255, 255, 255, 0.8)'
   },
   dashboardGrid: {
     display: 'grid',
@@ -300,8 +319,13 @@ const styles = {
     backgroundColor: 'white',
     borderRadius: '15px',
     padding: '25px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    border: '1px solid #e9ecef'
+    boxShadow: '0 4px 6px rgba(255, 140, 0, 0.1)',
+    border: '1px solid #e9ecef',
+    transition: 'all 0.3s ease',
+    ':hover': {
+      borderColor: '#ff8c00',
+      boxShadow: '0 6px 12px rgba(255, 140, 0, 0.15)'
+    }
   },
   cardTitle: {
     color: '#2c3e50',
@@ -335,7 +359,7 @@ const styles = {
     marginBottom: '8px'
   },
   progressBar: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#ff8c00',
     height: '100%',
     borderRadius: '10px',
     transition: 'width 1s ease-in-out'
@@ -435,7 +459,7 @@ const styles = {
     backgroundColor: 'white',
     borderRadius: '15px',
     padding: '25px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 6px rgba(255, 140, 0, 0.1)',
     transition: 'all 0.3s ease',
     cursor: 'pointer',
     border: '1px solid #e9ecef'
@@ -466,9 +490,65 @@ const styles = {
     borderRadius: '20px',
     fontSize: '0.85rem',
     fontWeight: 'bold',
-    backgroundColor: '#3498db',
-    color: 'white'
+    backgroundColor: '#ff8c00',
+    color: 'white',
+    boxShadow: '0 2px 8px rgba(255, 140, 0, 0.3), 0 0 20px rgba(255, 140, 0, 0.1)',
+    transition: 'all 0.3s ease',
+    ':hover': {
+      backgroundColor: '#ffa500',
+      boxShadow: '0 4px 12px rgba(255, 140, 0, 0.4), 0 0 25px rgba(255, 140, 0, 0.2)',
+      transform: 'translateY(-1px)'
+    }
   }
 };
+
+// Add enhanced animation styles
+const enhancedAnimations = `
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    }
+    50% {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 25px rgba(255, 140, 0, 0.4));
+    }
+  }
+  
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 8px 32px rgba(255, 140, 0, 0.3), 0 0 40px rgba(255, 140, 0, 0.1);
+    }
+    50% {
+      box-shadow: 0 8px 32px rgba(255, 140, 0, 0.5), 0 0 60px rgba(255, 140, 0, 0.2);
+    }
+  }
+`;
+
+// Inject the enhanced animations into the document head
+if (typeof document !== 'undefined') {
+  const styleSheet = document.createElement('style');
+  styleSheet.type = 'text/css';
+  styleSheet.innerText = enhancedAnimations;
+  document.head.appendChild(styleSheet);
+}
 
 export default SolvedProblems;

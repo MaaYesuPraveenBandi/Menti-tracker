@@ -22,7 +22,8 @@ router.post('/register', async (req, res) => {
     user = new User({
       username,
       email,
-      password
+      password,
+      cohort: 'Basic' // Default cohort for new users, can be updated later
     });
 
     // Encrypt password
