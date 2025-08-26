@@ -4,22 +4,26 @@ import api from '../utils/api';
 const SolvedProblems = () => {
   const [problems, setProblems] = useState([]);
   const [userProgress, setUserProgress] = useState(null);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [progressRes, problemsRes] = await Promise.all([
+        const [progressRes, problemsRes, leaderboardRes] = await Promise.all([
           api.get('/progress/user'),
-          api.get('/problems')
+          api.get('/problems'),
+          api.get('/leaderboard')
         ]);
         
         console.log('User Progress Data:', progressRes.data);
         console.log('All Problems:', problemsRes.data);
+        console.log('Leaderboard Data:', leaderboardRes.data);
         
         setUserProgress(progressRes.data);
         setProblems(problemsRes.data);
+        setLeaderboard(leaderboardRes.data);
       } catch (err) {
         console.error('Error fetching data:', err);
       } finally {
@@ -33,8 +37,12 @@ const SolvedProblems = () => {
   // Get solved problems - Fixed logic based on actual data structure
   const solvedProblems = userProgress?.user?.solvedProblems?.map(solvedItem => solvedItem.problemId) || [];
 
+  // Get top performer from leaderboard
+  const topPerformer = leaderboard && leaderboard.length > 0 ? leaderboard[0] : null;
+
   console.log('Solved Problems Count:', solvedProblems.length);
   console.log('Solved Problems:', solvedProblems);
+  console.log('Top Performer:', topPerformer);
 
   if (loading) {
     return (
@@ -49,6 +57,22 @@ const SolvedProblems = () => {
       <div style={styles.header}>
         <h1 style={styles.title}>🏆 Solved Problems</h1>
         <p style={styles.subtitle}>You've conquered {solvedProblems.length} problem{solvedProblems.length !== 1 ? 's' : ''}!</p>
+        
+        {/* Top Performer Section */}
+        {topPerformer && (
+          <div style={styles.topPerformerSection}>
+            <div style={styles.topPerformerTitle}>👑 Current Champion</div>
+            <div style={styles.topPerformerInfo}>
+              <span style={styles.crownIcon}>👑</span>
+              <span style={styles.topPerformerName}>{topPerformer.username}</span>
+              <div style={styles.topPerformerStats}>
+                <span style={styles.topPerformerScore}>{topPerformer.problemsSolved} problems</span>
+                <span style={styles.topPerformerSeparator}>•</span>
+                <span style={styles.topPerformerScore}>{topPerformer.totalScore} points</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Dashboard Overview */}
@@ -206,6 +230,65 @@ const styles = {
     color: '#7f8c8d',
     fontSize: '1.2rem',
     margin: 0
+  },
+  topPerformerSection: {
+    marginTop: '15px',
+    padding: '15px',
+    backgroundColor: 'linear-gradient(135deg, #ffd700, #ffed4e)',
+    background: 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)',
+    borderRadius: '10px',
+    border: '2px solid #ffc107',
+    boxShadow: '0 4px 15px rgba(255, 215, 0, 0.3)'
+  },
+  topPerformerTitle: {
+    color: '#b8860b',
+    fontSize: '1rem',
+    margin: '0 0 8px 0',
+    fontWeight: '600',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+  },
+  topPerformerInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px'
+  },
+  crownIcon: {
+    color: '#ffc107',
+    fontSize: '1.5rem',
+    textShadow: '0 2px 4px rgba(255, 193, 7, 0.5)'
+  },
+  topPerformerName: {
+    color: '#ffd700',
+    fontSize: '1.2rem',
+    fontWeight: 'bold',
+    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
+    background: 'linear-gradient(45deg, #ffd700, #ffed4e)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))'
+  },
+  topPerformerStats: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginTop: '5px'
+  },
+  topPerformerScore: {
+    color: '#ffd700',
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
+    background: 'linear-gradient(45deg, #ffd700, #ffed4e)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))'
+  },
+  topPerformerSeparator: {
+    color: '#ffd700',
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)'
   },
   dashboardGrid: {
     display: 'grid',

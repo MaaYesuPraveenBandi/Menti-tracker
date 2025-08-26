@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Problems from './pages/Problems';
-import Leaderboard from './pages/Leaderboard';
+import LeaderboardNew from './pages/LeaderboardNew';
 import SolvedProblems from './pages/SolvedProblems';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
@@ -24,7 +24,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/problems" element={<Problems />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/leaderboard" element={<LeaderboardNew />} />
             <Route path="/solved" element={<SolvedProblems />} />
             <Route path="/profile" element={<Profile />} />
               
