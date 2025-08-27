@@ -128,22 +128,38 @@ const AdminDashboard = () => {
       </div>
 
       <div className="recent-activity">
-        <h3>Recent Problems</h3>
+        <h3>📚 Recent Problems</h3>
         <div className="activity-list">
           {stats.recentActivity.map(problem => (
             <div key={problem._id} className="activity-item">
-              <div className="activity-content">
-                <strong>{problem.title}</strong>
-                <span className="activity-meta">
-                  {problem.difficulty} • {problem.category} • {problem.points} points
-                </span>
+              <div className="problem-header">
+                <div className="problem-title-section">
+                  <h4 className="problem-title">{problem.title}</h4>
+                  <div className="problem-badges">
+                    <span className={`difficulty-badge difficulty-${problem.difficulty.toLowerCase()}`}>
+                      {problem.difficulty}
+                    </span>
+                    <span className="category-badge">
+                      {problem.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="problem-actions">
+                  <div className="points-display">
+                    <span className="points-icon">🏆</span>
+                    <span className="points-value">{problem.points}</span>
+                    <span className="points-text">points</span>
+                  </div>
+                  <button 
+                    className="edit-btn"
+                    onClick={() => navigate(`/admin/problems/edit/${problem._id}`)}
+                    title="Edit Problem"
+                  >
+                    <span className="edit-icon">✏️</span>
+                    <span className="edit-text">Edit</span>
+                  </button>
+                </div>
               </div>
-              <button 
-                className="btn-small"
-                onClick={() => navigate(`/admin/problems/edit/${problem._id}`)}
-              >
-                Edit
-              </button>
             </div>
           ))}
           
