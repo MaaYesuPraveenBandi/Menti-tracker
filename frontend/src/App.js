@@ -11,6 +11,7 @@ import AdminProblems from './pages/AdminProblems';
 import ProblemForm from './pages/ProblemForm';
 import FindUser from './pages/FindUser';
 import Sidebar from './components/Sidebar';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
@@ -21,20 +22,68 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/problems" element={<Problems />} />
-            <Route path="/leaderboard" element={<LeaderboardNew />} />
-            <Route path="/solved" element={<SolvedProblems />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/problems" element={
+              <ProtectedRoute>
+                <Problems />
+              </ProtectedRoute>
+            } />
+            <Route path="/leaderboard" element={
+              <ProtectedRoute>
+                <LeaderboardNew />
+              </ProtectedRoute>
+            } />
+            <Route path="/solved" element={
+              <ProtectedRoute>
+                <SolvedProblems />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
               
-              {/* Admin Routes */}
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin/problems" element={<AdminProblems />} />
-              <Route path="/admin/problems/new" element={<ProblemForm />} />
-              <Route path="/admin/problems/edit/:id" element={<ProblemForm />} />
-              <Route path="/admin/find-user" element={<FindUser />} />
+              {/* Admin Routes - Protected with admin requirement */}
+              <Route path="/admin" element={
+                <ProtectedRoute adminRequired={true}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/dashboard" element={
+                <ProtectedRoute adminRequired={true}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/problems" element={
+                <ProtectedRoute adminRequired={true}>
+                  <AdminProblems />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/problems/new" element={
+                <ProtectedRoute adminRequired={true}>
+                  <ProblemForm />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/problems/edit/:id" element={
+                <ProtectedRoute adminRequired={true}>
+                  <ProblemForm />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/find-user" element={
+                <ProtectedRoute adminRequired={true}>
+                  <FindUser />
+                </ProtectedRoute>
+              } />
             </Routes>
           </div>
         </div>

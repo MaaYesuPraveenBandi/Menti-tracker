@@ -22,10 +22,6 @@ const Sidebar = () => {
   ];
 
   useEffect(() => {
-    // TEMPORARY: Enable admin access for testing
-    // Remove this when you have proper authentication
-    setIsAdmin(true);
-    
     // Only check admin status if user is logged in
     const token = localStorage.getItem('token');
     if (token) {
